@@ -37,7 +37,10 @@ def setupAndroidReporting(Project currentProject) {
     ) {
         reports {
             csv.enabled false
-            xml.enabled true
+            xml {
+                enabled true
+                destination file("${buildDir}/coverage-report/${currentProject.name}.xml")
+            }
             html.enabled false
         }
 
@@ -64,7 +67,10 @@ def setupKotlinReporting() {
         dependsOn test
         reports {
             csv.enabled false
-            xml.enabled true
+            xml {
+                enabled true
+                destination file("${buildDir}/coverage-report/${currentProject.name}.xml")
+            }
             html.enabled false
         }
     }
