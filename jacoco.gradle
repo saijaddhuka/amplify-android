@@ -14,7 +14,7 @@ afterEvaluate { project ->
     }
     setupTestExistenceValidationTask()
     if (isAndroidModule(project)) {
-        setupAndroidReporting()
+        setupAndroidReporting(project)
     } else {
         setupKotlinReporting()
     }
@@ -24,7 +24,7 @@ def setupTestExistenceValidationTask() {
     task testExistenceValidation(type: TestExistenceValidation)
 }
 
-def setupAndroidReporting() {
+def setupAndroidReporting(Project currentProject) {
     tasks.withType(Test) {
         jacoco.includeNoLocationClasses true
     }
@@ -37,14 +37,8 @@ def setupAndroidReporting() {
     ) {
         reports {
             csv.enabled false
-            xml {
-                enabled true
-                destination file("${buildDir}/coverage-report")
-            }
-            html {
-                enabled true
-                destination file("${buildDir}/coverage-report")
-            }
+            xml.enabled true
+            html.enabled false
         }
 
         final def coverageSourceDirs = [
@@ -70,14 +64,8 @@ def setupKotlinReporting() {
         dependsOn test
         reports {
             csv.enabled false
-            xml {
-                enabled true
-                destination file("${buildDir}/coverage-report")
-            }
-            html {
-                enabled true
-                destination file("${buildDir}/coverage-report")
-            }
+            xml.enabled true
+            html.enabled false
         }
     }
 }
