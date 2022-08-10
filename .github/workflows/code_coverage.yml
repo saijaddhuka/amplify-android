@@ -27,7 +27,8 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: '8'
-          script: ./gradlew jacocoTestReport
+          distribution: 'corretto'
+          run: ./gradlew jacocoTestReport
           #./gradlew createDebugCoverageReport:
 
         # run: ./gradlew testDebugUnitTest
