@@ -29,7 +29,7 @@ jobs:
           java-version: '8'
           distribution: 'corretto'
 
-      - run: ./gradlew aws-storage-s3:jacocoTestReport
+      - run: ./gradlew jacocoTestReport
           #./gradlew createDebugCoverageReport:
 
         # run: ./gradlew testDebugUnitTest
@@ -38,11 +38,11 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: report
-          path: aws-storage-s3/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml
+          path: .**/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml
             # path: app/build/test-results
 
       - name: Upload Test Report
         uses: codecov/codecov-action@v3
         with:
           name: report
-          files: aws-storage-s3/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml
+          files: .**/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml
