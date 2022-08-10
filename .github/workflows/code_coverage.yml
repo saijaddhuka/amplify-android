@@ -28,7 +28,7 @@ jobs:
           java-version: '8'
           distribution: 'corretto'
 
-      - run: ./gradlew aws-storage-s3:jacocoTestReport
+      - run: ./gradlew jacocoTestReport
           #./gradlew createDebugCoverageReport:
 
         # run: ./gradlew testDebugUnitTest
