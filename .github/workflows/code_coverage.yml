@@ -28,7 +28,7 @@ jobs:
         with:
           java-version: '8'
           distribution: 'corretto'
-          run: ./gradlew jacocoTestReport
+        run: ./gradlew jacocoTestReport
           #./gradlew createDebugCoverageReport:
 
         # run: ./gradlew testDebugUnitTest
