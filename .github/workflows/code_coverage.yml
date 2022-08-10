@@ -40,9 +40,11 @@ jobs:
           name: report
           path: .*/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml
             # path: app/build/test-results
+      - name: create temp directory
+        run: mkdir /home/runner/work/amplify-android/amplify-android/code-coverage
 
-      - run: mkdir /home/runner/work/amplify-android/amplify-android/code-coverage
-      - run: cp -r /home/runner/work/amplify-android/amplify-android/**/build/coverage-report/*.xml /home/runner/work/amplify-android/amplify-android/code-coverage
+      - name: copy test report
+        run: cp -r /home/runner/work/amplify-android/amplify-android/**/build/coverage-report/*.xml /home/runner/work/amplify-android/amplify-android/code-coverage/
 
       - name: Upload Test Report
         uses: codecov/codecov-action@v3
