@@ -38,11 +38,11 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: report
-          path: /**/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml
+          path: ../**/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml
             # path: app/build/test-results
 
       - name: Upload Test Report
         uses: codecov/codecov-action@v3
         with:
           name: report
-          files: .**/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml
+          files: ../**/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml
