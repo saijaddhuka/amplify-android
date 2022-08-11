@@ -89,7 +89,7 @@ public final class StorageComponentTest {
         CognitoAuthProvider cognitoAuthProvider = mock(CognitoAuthProvider.class);
         doReturn(RandomString.string()).when(cognitoAuthProvider).getIdentityId();
         this.storage.addPlugin(new AWSS3StoragePlugin(storageServiceFactory,
-                cognitoAuthProvider, new AWSS3StoragePluginConfiguration.Builder().build())
+            cognitoAuthProvider, new AWSS3StoragePluginConfiguration.Builder().build())
         );
         this.storage.configure(buildConfiguration(), getApplicationContext());
         this.storage.initialize(getApplicationContext());
@@ -99,10 +99,10 @@ public final class StorageComponentTest {
         StorageCategoryConfiguration configuration = new StorageCategoryConfiguration();
         try {
             configuration.populateFromJSON(
-                    new JSONObject().put("plugins", new JSONObject()
-                            .put("awsS3StoragePlugin", new JSONObject()
-                                    .put("region", "us-east-1")
-                                    .put("bucket", "hamburger-bucket")))
+                new JSONObject().put("plugins", new JSONObject()
+                    .put("awsS3StoragePlugin", new JSONObject()
+                        .put("region", "us-east-1")
+                        .put("bucket", "hamburger-bucket")))
             );
         } catch (JSONException jsonException) {
             throw new RuntimeException(jsonException);
@@ -126,11 +126,11 @@ public final class StorageComponentTest {
             // URL instance cannot be mocked so just make one
             // https://{random-host}:0/{fromRemoteKey}
             urlFromRemoteKey = new URL(
-                    "https",
-                    RandomString.string(),
-                    0,
-                    fromRemoteKey,
-                    null
+                "https",
+                RandomString.string(),
+                0,
+                fromRemoteKey,
+                null
             );
         } catch (MalformedURLException exception) {
             throw new RuntimeException(exception);
@@ -139,15 +139,15 @@ public final class StorageComponentTest {
         // Allow mock StorageService instance to return a non-null
         // URL instance.
         when(storageService.getPresignedUrl(anyString(), anyInt()))
-                .thenReturn(urlFromRemoteKey);
+            .thenReturn(urlFromRemoteKey);
 
         // Let Storage category invoke getUrl on mock Storage Service.
         StorageGetUrlResult result = Await.<StorageGetUrlResult, StorageException>result(
             (onResult, onError) -> storage.getUrl(
-                 fromRemoteKey,
-                 onResult,
-                 onError
-             )
+                fromRemoteKey,
+                onResult,
+                onError
+            )
         );
 
         assertEquals(urlFromRemoteKey, result.getUrl());
@@ -170,7 +170,7 @@ public final class StorageComponentTest {
         // One option is to mock that, too.
         TransferObserver observer = mock(TransferObserver.class);
         when(storageService.downloadToFile(anyString(), any(File.class)))
-                .thenReturn(observer);
+            .thenReturn(observer);
 
         // Since we use a mock TransferObserver, it has no internal logic
         // to know to call back the listener! So, we simulate the success
@@ -180,17 +180,17 @@ public final class StorageComponentTest {
             listener.onStateChanged(0, TransferState.COMPLETED);
             return null;
         }).when(observer)
-                .setTransferListener(any(TransferListener.class));
+            .setTransferListener(any(TransferListener.class));
 
         StorageDownloadFileResult result =
-                Await.<StorageDownloadFileResult, StorageException>result((onResult, onError) ->
-                        storage.downloadFile(
-                                fromRemoteKey,
-                                toLocalFile,
-                                onResult,
-                                onError
-                        )
-                );
+            Await.<StorageDownloadFileResult, StorageException>result((onResult, onError) ->
+                storage.downloadFile(
+                    fromRemoteKey,
+                    toLocalFile,
+                    onResult,
+                    onError
+                )
+            );
 
         assertEquals(toLocalFile.getAbsolutePath(), result.getFile().toString());
     }
@@ -204,8 +204,8 @@ public final class StorageComponentTest {
     @Test
     public void testDownloadError() throws IOException {
         final StorageException testError = new StorageException(
-                "Test error message",
-                "Test recovery message"
+            "Test error message",
+            "Test recovery message"
         );
 
         final String fromRemoteKey = RandomString.string();
@@ -213,24 +213,24 @@ public final class StorageComponentTest {
 
         TransferObserver observer = mock(TransferObserver.class);
         when(storageService.downloadToFile(anyString(), any(File.class)))
-                .thenReturn(observer);
+            .thenReturn(observer);
 
         doAnswer(invocation -> {
             TransferListener listener = invocation.getArgument(0);
             listener.onError(0, testError);
             return null;
         }).when(observer)
-                .setTransferListener(any(TransferListener.class));
+            .setTransferListener(any(TransferListener.class));
 
         StorageException error =
-                Await.<StorageDownloadFileResult, StorageException>error((onResult, onError) ->
-                        storage.downloadFile(
-                                fromRemoteKey,
-                                toLocalFile,
-                                onResult,
-                                onError
-                        )
-                );
+            Await.<StorageDownloadFileResult, StorageException>error((onResult, onError) ->
+                storage.downloadFile(
+                    fromRemoteKey,
+                    toLocalFile,
+                    onResult,
+                    onError
+                )
+            );
 
         assertEquals(testError, error.getCause());
     }
@@ -249,24 +249,24 @@ public final class StorageComponentTest {
 
         TransferObserver observer = mock(TransferObserver.class);
         when(storageService.uploadFile(anyString(), any(File.class), any(ObjectMetadata.class)))
-                .thenReturn(observer);
+            .thenReturn(observer);
 
         doAnswer(invocation -> {
             TransferListener listener = invocation.getArgument(0);
             listener.onStateChanged(0, TransferState.COMPLETED);
             return null;
         }).when(observer)
-                .setTransferListener(any(TransferListener.class));
+            .setTransferListener(any(TransferListener.class));
 
         StorageUploadFileResult result =
-                Await.<StorageUploadFileResult, StorageException>result((onResult, onError) ->
-                        storage.uploadFile(
-                                toRemoteKey,
-                                fromLocalFile,
-                                onResult,
-                                onError
-                        )
-                );
+            Await.<StorageUploadFileResult, StorageException>result((onResult, onError) ->
+                storage.uploadFile(
+                    toRemoteKey,
+                    fromLocalFile,
+                    onResult,
+                    onError
+                )
+            );
 
         assertEquals(toRemoteKey, result.getKey());
     }
@@ -285,24 +285,24 @@ public final class StorageComponentTest {
 
         TransferObserver observer = mock(TransferObserver.class);
         when(storageService.uploadInputStream(anyString(), any(InputStream.class), any(ObjectMetadata.class)))
-                .thenReturn(observer);
+            .thenReturn(observer);
 
         doAnswer(invocation -> {
             TransferListener listener = invocation.getArgument(0);
             listener.onStateChanged(0, TransferState.COMPLETED);
             return null;
         }).when(observer)
-                .setTransferListener(any(TransferListener.class));
+            .setTransferListener(any(TransferListener.class));
 
         StorageUploadInputStreamResult result =
-                Await.<StorageUploadInputStreamResult, StorageException>result((onResult, onError) ->
-                        storage.uploadInputStream(
-                                toRemoteKey,
-                                inputStream,
-                                onResult,
-                                onError
-                        )
-                );
+            Await.<StorageUploadInputStreamResult, StorageException>result((onResult, onError) ->
+                storage.uploadInputStream(
+                    toRemoteKey,
+                    inputStream,
+                    onResult,
+                    onError
+                )
+            );
 
         assertEquals(toRemoteKey, result.getKey());
     }
@@ -316,8 +316,8 @@ public final class StorageComponentTest {
     @Test
     public void testUploadFileError() throws IOException {
         final StorageException testError = new StorageException(
-                "Test error message",
-                "Test recovery message"
+            "Test error message",
+            "Test recovery message"
         );
 
         final String toRemoteKey = RandomString.string();
@@ -325,24 +325,24 @@ public final class StorageComponentTest {
 
         TransferObserver observer = mock(TransferObserver.class);
         when(storageService.uploadFile(anyString(), any(File.class), any(ObjectMetadata.class)))
-                .thenReturn(observer);
+            .thenReturn(observer);
 
         doAnswer(invocation -> {
             TransferListener listener = invocation.getArgument(0);
             listener.onError(0, testError);
             return null;
         }).when(observer)
-                .setTransferListener(any(TransferListener.class));
+            .setTransferListener(any(TransferListener.class));
 
         StorageException error =
-                Await.<StorageUploadFileResult, StorageException>error((onResult, onError) ->
-                        storage.uploadFile(
-                                toRemoteKey,
-                                fromLocalFile,
-                                onResult,
-                                onError
-                        )
-                );
+            Await.<StorageUploadFileResult, StorageException>error((onResult, onError) ->
+                storage.uploadFile(
+                    toRemoteKey,
+                    fromLocalFile,
+                    onResult,
+                    onError
+                )
+            );
 
         assertEquals(testError, error.getCause());
     }
@@ -356,8 +356,8 @@ public final class StorageComponentTest {
     @Test
     public void testInputStreamError() throws IOException {
         final StorageException testError = new StorageException(
-                "Test error message",
-                "Test recovery message"
+            "Test error message",
+            "Test recovery message"
         );
 
         final String toRemoteKey = RandomString.string();
@@ -365,24 +365,24 @@ public final class StorageComponentTest {
 
         TransferObserver observer = mock(TransferObserver.class);
         when(storageService.uploadInputStream(anyString(), any(InputStream.class), any(ObjectMetadata.class)))
-                .thenReturn(observer);
+            .thenReturn(observer);
 
         doAnswer(invocation -> {
             TransferListener listener = invocation.getArgument(0);
             listener.onError(0, testError);
             return null;
         }).when(observer)
-                .setTransferListener(any(TransferListener.class));
+            .setTransferListener(any(TransferListener.class));
 
         StorageException error =
-                Await.<StorageUploadInputStreamResult, StorageException>error((onResult, onError) ->
-                        storage.uploadInputStream(
-                                toRemoteKey,
-                                inputStream,
-                                onResult,
-                                onError
-                        )
-                );
+            Await.<StorageUploadInputStreamResult, StorageException>error((onResult, onError) ->
+                storage.uploadInputStream(
+                    toRemoteKey,
+                    inputStream,
+                    onResult,
+                    onError
+                )
+            );
 
         assertEquals(testError, error.getCause());
     }
@@ -399,49 +399,25 @@ public final class StorageComponentTest {
     public void testListObject() throws StorageException {
         final String path = RandomString.string();
         final StorageItem item = new StorageItem(
-                RandomString.string(),
-                0L,
-                new Date(),
-                RandomString.string(),
-                null
+            RandomString.string(),
+            0L,
+            new Date(),
+            RandomString.string(),
+            null
         );
 
         when(storageService.listFiles(anyString(), anyString()))
-                .thenReturn(Collections.singletonList(item));
+            .thenReturn(Collections.singletonList(item));
 
         StorageListResult result =
-                Await.<StorageListResult, StorageException>result((onResult, onError) ->
-                        storage.list(
-                                path,
-                                onResult,
-                                onError
-                        )
-                );
+            Await.<StorageListResult, StorageException>result((onResult, onError) ->
+                storage.list(
+                    path,
+                    onResult,
+                    onError
+                )
+            );
 
         assertEquals(item, result.getItems().get(0));
-    }
-
-    /**
-     * Test that calling remove method from Storage category correctly
-     * invokes the registered AWSS3StoragePlugin instance and returns a
-     * {@link StorageRemoveResult} with key of removed item.
-     *
-     * @throws StorageException when an error is encountered while deleting
-     *                          file from storage
-     */
-    @Test
-    public void testRemoveObjectGetsKey() throws StorageException {
-        final String remoteKey = RandomString.string();
-
-        StorageRemoveResult result =
-                Await.<StorageRemoveResult, StorageException>result((onResult, onError) ->
-                        storage.remove(
-                                remoteKey,
-                                onResult,
-                                onError
-                        )
-                );
-
-        assertEquals(remoteKey, result.getKey());
     }
 }
