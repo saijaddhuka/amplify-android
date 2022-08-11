@@ -3,6 +3,8 @@ project.ext {
     jacocoCoverageThresholdDefault = 0.60
 
     jacocoIgnoreList = [
+            'testutils',
+            'testmodels'
     ]
 
     // Exclude file by names, packages or types. Such files will be ignored during test coverage
