@@ -22,27 +22,19 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
       # Execute unit tests
-      - name: Unit Test with Android Emulator Runner
+      - name: Setup Java
         uses: actions/setup-java@v3
         with:
           java-version: '8'
           distribution: 'corretto'
 
-      - run: ./gradlew jacocoTestReport
-          #./gradlew createDebugCoverageReport:
+      - name: Run test and generate jacoco report
+        run: ./gradlew jacocoTestReport
 
-        # run: ./gradlew testDebugUnitTest
-
-      - name: generate report
-        uses: actions/upload-artifact@v2
-        with:
-          name: report
-          path: .*/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml
-            # path: app/build/test-results
       - name: create temp directory
         run: mkdir /home/runner/work/amplify-android/amplify-android/code-coverage
 
-      - name: copy test report
+      - name: copy jacoco test report to temp directory
         run: cp -r /home/runner/work/amplify-android/amplify-android/**/build/coverage-report/*.xml /home/runner/work/amplify-android/amplify-android/code-coverage/
 
       - name: Upload Test Report
