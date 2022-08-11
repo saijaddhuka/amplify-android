@@ -48,12 +48,17 @@ def setupAndroidReporting(Project currentProject) {
                 "$projectDir/src/main/java",
                 "$projectDir/src/main/kotlin"
         ]
-        final def debugTree = fileTree(
+        final def kotlinDebugTree = fileTree(
                 dir: "$buildDir/tmp/kotlin-classes/debug",
                 excludes: jacocoFileFilter
         )
+
+        final def javaDebugTree = fileTree(
+                dir: "$buildDir/intermediates/javac/debug/classes",
+                excludes: jacocoFileFilter
+        )
         sourceDirectories.from = files(coverageSourceDirs)
-        classDirectories.from = files([debugTree])
+        classDirectories.from = files([kotlinDebugTree, javaDebugTree])
         executionData.from = fileTree(
                 dir: project.buildDir,
                 includes: ['jacoco/testDebugUnitTest.exec']
